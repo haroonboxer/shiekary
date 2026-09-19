@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeAttachmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeePaymentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JavazController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PresidentController;
@@ -152,4 +153,5 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:3')->group(function () {
         Route::get('/weapon-print/{organization_id}', [WeaponPrintController::class, 'print_weapon_card'])->name('weapon-print');
     });
+    Route::get('/javaz', [JavazController::class, 'index'])->name('javaz');
 });

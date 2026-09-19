@@ -156,6 +156,15 @@
                 @endif
                 @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
                     <li
+                        class="nav-item {{ Route::currentRouteName() == 'javaz' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'javaz' ? 'active' : '' }} @endif">
+                        <a class="d-flex align-items-center"
+                            href="{{ Route::currentRouteName() != 'javaz' ? route('javaz') : 'javascript:void(0)' }}"><i
+                                data-feather="book-open"></i><span class="menu-title text-truncate">جوازهای نزدیک به ختم اعتبار 
+                                </span></a>
+                    </li>
+                @endif
+                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
+                    <li
                         class="nav-item {{ Route::currentRouteName() == 'report' ? 'active' : '' }} @if (Route::currentRouteName() == 'report') {{ Session::get('menu') == 'report' ? 'active' : '' }} @endif">
                         <a class="d-flex align-items-center"
                             href="{{ Route::currentRouteName() != 'report' ? route('report') : 'javascript:void(0)' }}"><i
@@ -177,7 +186,8 @@
                         class="nav-item {{ Route::currentRouteName() == 'shekari-weapon-report' ? 'active' : '' }} @if (Route::currentRouteName() == 'shekari-weapon-report') {{ Session::get('shekari-weapon-report') == 'shekari-weapon-report' ? 'active' : '' }} @endif">
                         <a class="d-flex align-items-center"
                             href="{{ Route::currentRouteName() != 'shekari-weapon-report' ? route('shekari-weapon-report') : 'javascript:void(0)' }}"><i
-                                data-feather="check-circle"></i><span class="menu-title text-truncate">گذارشات تفنګ های شکاری</span></a>
+                                data-feather="check-circle"></i><span class="menu-title text-truncate">گذارشات تفنګ
+                                های شکاری</span></a>
                     </li>
                 @endif
                 {{-- @if (auth()->user()->role_id == 3 || auth()->user()->role_id == 2)

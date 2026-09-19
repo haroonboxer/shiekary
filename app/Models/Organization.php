@@ -12,13 +12,11 @@ class Organization extends Model
 
     public function created_by_details()
     {
-        return $this->hasOne(User::class, 'id', 'created_by');
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
     public function licenses()
     {
         return $this->hasMany(License::class);
     }
-
-
 }
