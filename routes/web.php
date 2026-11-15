@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\SSOController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\EmployeeAttachmentController;
 use App\Http\Controllers\EmployeeController;
@@ -24,14 +25,18 @@ use Illuminate\Support\Facades\Route;
 
 Illuminate\Support\Facades\Auth::routes();
 
-Route::get('/', function () {
-    return view('auth.login');
-})->name('/');
+// Route::get('/', function () {
+//     return view('auth.login');
+// })->name('/');
+Route::post('sso-login', [SSOController::class, 'login']);
+Route::post('logout', [SSOController::class, 'logout'])->name('logout');
+Route::get('/sso-redirect', [SSOController::class, 'redirectToSSOToHomePage'])->name('sso.redirect');
 
-Route::middleware('auth')->group(function () {
+
+Route::middleware('auth:sso')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-    Route::middleware('role:1')->group(function () {
+    Route::middleware('role:ادمین')->group(function () {
         Route::post('/user-update', [RegisterController::class, 'update'])->name('user-update');
     });
 
@@ -39,7 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/user-profile', [RegisterController::class, 'profile'])->name('user-profile');
     Route::post('/update-profile', [RegisterController::class, 'update_profile'])->name('update-profile');
 
-    Route::middleware(['role:2,4'])->group(function () {
+    Route::middleware(['role:ثبت کمپنی ها,تایید'])->group(function () {
         // organization
         Route::get('/organizations', [OrganizationController::class, 'index'])->name('organizations');
         Route::get('/shops', [OrganizationController::class, 'shops'])->name('shops');
@@ -150,8 +155,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('/show-weapon-to-print', [WeaponPrintController::class, 'index'])->name('show-weapon-to-print');
-    Route::middleware('role:3')->group(function () {
+    Route::middleware('role:چاپ کارت اسلحه')->group(function () {
         Route::get('/weapon-print/{organization_id}', [WeaponPrintController::class, 'print_weapon_card'])->name('weapon-print');
     });
+
     Route::get('/javaz', [JavazController::class, 'index'])->name('javaz');
 });

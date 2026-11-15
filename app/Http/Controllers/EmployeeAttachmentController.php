@@ -61,7 +61,7 @@ class EmployeeAttachmentController extends Controller
     {
         $employee_payment = EmployeeAttachment::findOrFail($id);
         $employee_payment->is_approved = 1;
-        $employee_payment->approved_by = auth()->id();
+        $employee_payment->approved_by = get_user_id();
         $employee_payment->save();
         return true;
     }
@@ -70,7 +70,7 @@ class EmployeeAttachmentController extends Controller
     {
         $employee_payment = EmployeeAttachment::findOrFail($id);
         $employee_payment->is_approved = 2;
-        $employee_payment->approved_by = auth()->id();
+        $employee_payment->approved_by = get_user_id();
         $employee_payment->save();
         return true;
     }

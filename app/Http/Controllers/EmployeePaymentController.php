@@ -61,6 +61,7 @@ class EmployeePaymentController extends Controller
             $employee->approved_by = null;
         }
         $request->employee_payment_id == 0 ? $employee->created_by = get_user_id() : $employee->updated_by = get_user_id();
+        $request->employee_payment_id == 0 ? $employee->created_by = get_user_name() : $employee->updated_by = get_user_name();
         $request->employee_payment_id == 0 ? $employee->save() : $employee->update();
 
         return true;
@@ -70,7 +71,8 @@ class EmployeePaymentController extends Controller
     {
         $employee_payment = EmployeePayment::findOrFail($id);
         $employee_payment->is_approved = 1;
-        $employee_payment->approved_by = auth()->id();
+        $employee_payment->approved_by = get_user_id();
+        $employee_payment->approved_by_name = get_user_name();
         $employee_payment->save();
         return true;
     }
@@ -79,7 +81,8 @@ class EmployeePaymentController extends Controller
     {
         $employee_payment = EmployeePayment::findOrFail($id);
         $employee_payment->is_approved = 2;
-        $employee_payment->approved_by = auth()->id();
+        $employee_payment->approved_by = get_user_id();
+        $employee_payment->approved_by_name = get_user_name();
         $employee_payment->save();
         return true;
     }

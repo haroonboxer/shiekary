@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Models\VicePresident;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -61,7 +62,7 @@ class OrganizationController extends Controller
 
                     if ($data->status == 1) {
                         $btn .=  "<a href='#' class='me-1 deactive_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-danger btn-sm waves-effect round fa fa-trash'></span></a>";
-                        if (auth()->user()->role_id == 4) {
+                        if (in_array('تایید', Auth::user()->roles, true)) {
                             $btn .=  "<a href='#' class='me-1 approve_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a>";
                             $btn .=  "<a href='#' class='me-1 reject_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a>";
                         }
@@ -117,7 +118,7 @@ class OrganizationController extends Controller
 
                     if ($data->status == 1) {
                         $btn .=  "<a href='#' class='me-1 deactive_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-danger btn-sm waves-effect round fa fa-trash'></span></a>";
-                        if (auth()->user()->role_id == 4) {
+                        if (in_array('تایید', Auth::user()->roles, true)) {
                             $btn .=  "<a href='#' class='me-1 approve_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a>";
                             $btn .=  "<a href='#' class='me-1 reject_btn' style='cursor: pointer;' data-id='" . $data->id . "'><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a>";
                         }
@@ -163,7 +164,8 @@ class OrganizationController extends Controller
         $organization->sub_main_office_address = $request->sub_main_office_address;
         $organization->type = $request->type;
         $organization->logo = $request->has('image') ? $img : $organization->logo;
-        $request->organization_id == 0 ? $organization->created_by = auth()->id() : $organization->updated_by = auth()->id();
+        $request->organization_id == 0 ? $organization->created_by = Auth::user()->id : $organization->updated_by = Auth::user()->id;
+        $request->organization_id == 0 ? $organization->created_by_name = Auth::user()->name : $organization->updated_by_name = Auth::user()->name;
         if ($request->organization_id != 0) {
             $organization->is_approved = 0;
             $organization->approved_by = null;
@@ -191,7 +193,8 @@ class OrganizationController extends Controller
     {
         $position = Organization::findOrFail($id);
         $position->status = 0;
-        $position->updated_by = auth()->id();
+        $position->updated_by = Auth::user()->id;
+        $position->updated_by_name = Auth::user()->name;
         $position->save();
         return true;
     }
@@ -200,7 +203,8 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $organization->is_approved = 1;
-        $organization->approved_by = auth()->id();
+        $organization->approved_by = Auth::user()->id;
+        $organization->approved_by_name = Auth::user()->name;
         $organization->save();
         return true;
     }
@@ -209,7 +213,8 @@ class OrganizationController extends Controller
     {
         $organization = Organization::findOrFail($id);
         $organization->is_approved = 2;
-        $organization->approved_by = auth()->id();
+        $organization->approved_by = Auth::user()->id;
+        $organization->approved_by_name = Auth::user()->name;
         $organization->save();
         return true;
     }
@@ -219,7 +224,7 @@ class OrganizationController extends Controller
         $data['organization'] = Organization::findOrFail(decode_organization_id($organization_id));
         if ($data['organization']->type == 1) {
             Session::flash('menu', 'company');
-        }else {
+        } else {
             Session::flash('menu', 'shop');
         }
         return view('organization.general', $data);

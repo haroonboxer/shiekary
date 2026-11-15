@@ -93,13 +93,13 @@ class VicePresidentController extends Controller
         $vice_president->nid_pass_no = $request->nid_pass_no;
         $vice_president->tin = $request->tin;
         // if ($request->country_id == 1) {
-            $vice_president->permanent_province_id = $request->permanent_province_id;
-            $vice_president->permanent_district_id = $request->permanent_district_id;
-            $vice_president->permanent_village = $request->permanent_village;
+        $vice_president->permanent_province_id = $request->permanent_province_id;
+        $vice_president->permanent_district_id = $request->permanent_district_id;
+        $vice_president->permanent_village = $request->permanent_village;
         // } else {
-            // $vice_president->city = $request->city;
-            // $vice_president->street_no = $request->street_no;
-            // $vice_president->main_office_address = $request->main_office_address;
+        // $vice_president->city = $request->city;
+        // $vice_president->street_no = $request->street_no;
+        // $vice_president->main_office_address = $request->main_office_address;
         // }
         if ($request->vice_president_id != 0) {
             $vice_president->is_approved = 0;
@@ -150,7 +150,8 @@ class VicePresidentController extends Controller
     {
         $vice_president = VicePresident::findOrFail($id);
         $vice_president->is_approved = 1;
-        $vice_president->approved_by = auth()->id();
+        $vice_president->approved_by = get_user_id();;
+        $vice_president->approved_by_name = get_user_name();
         $vice_president->save();
         return true;
     }
@@ -159,7 +160,8 @@ class VicePresidentController extends Controller
     {
         $vice_president = VicePresident::findOrFail($id);
         $vice_president->is_approved = 2;
-        $vice_president->approved_by = auth()->id();
+        $vice_president->approved_by = get_user_id();;
+        $vice_president->approved_by_name = get_user_name();
         $vice_president->save();
         return true;
     }

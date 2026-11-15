@@ -18,7 +18,7 @@ class LicenseController extends Controller
     {
         $data['organization_id'] = $organization_id;
         $data['organization_type'] = Organization::where('id', decode_organization_id($organization_id))->first()->type;
-// dd($data['organization_type']);
+        // dd($data['organization_type']);
         $data['licenses'] = License::where('organization_id', decode_organization_id($organization_id))->orderBy('id', 'desc')->get();
         $data['license_types'] = LicenseType::select('id', 'name_dr')->get();
         return view('organization.license', $data);
@@ -87,6 +87,7 @@ class LicenseController extends Controller
             $license->approved_by = null;
         }
         $request->license_id == 0 ? $license->created_by = get_user_id() : $license->updated_by = get_user_id();
+        $request->license_id == 0 ? $license->created_by_name = get_user_name() : $license->updated_by_name = get_user_name();
         $request->license_id == 0 ? $license->save() : $license->update();
 
         return true;
@@ -112,6 +113,7 @@ class LicenseController extends Controller
         $license->status_reason = $request->status_reason;
         $license->status = 0;
         $license->updated_by = get_user_id();
+        $license->updated_by_name = get_user_name();
         $license->update();
         return true;
     }
@@ -125,7 +127,7 @@ class LicenseController extends Controller
         $data['vice_president'] = VicePresident::where(['status' => 1, 'organization_id' => $data['license']->organization_id])->orderBy('id', 'desc')->select('name_dr', 'name_en', 'last_name_dr', 'last_name_en', 'image')->first();
         if ($data['organization']->type == 1) {
             return view('organization.license-org-print', $data);
-        }elseif ($data['organization']->type == 2) {
+        } elseif ($data['organization']->type == 2) {
             return view('organization.license-print', $data);
         }
     }
@@ -137,6 +139,7 @@ class LicenseController extends Controller
         $license->is_approved = 1;
         $license->printed_by = get_user_id();
         $license->approved_by = get_user_id();
+        $license->approved_by_name = get_user_name();
         $license->printed_at = date('Y-m-d');
         $license->update();
         $organization = Organization::where('id', $license->organization_id)->first();
@@ -156,7 +159,8 @@ class LicenseController extends Controller
     {
         $license = License::findOrFail($id);
         $license->is_approved = 1;
-        $license->approved_by = auth()->id();
+        $license->approved_by =  get_user_id();
+        $license->approved_by_name =  get_user_name();
         $license->save();
         return true;
     }
@@ -165,7 +169,8 @@ class LicenseController extends Controller
     {
         $license = License::findOrFail($id);
         $license->is_approved = 2;
-        $license->approved_by = auth()->id();
+        $license->approved_by = get_user_id();
+        $license->approved_by_name = get_user_name();
         $license->save();
         return true;
     }

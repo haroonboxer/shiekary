@@ -125,7 +125,8 @@ class VehicleController extends Controller
     {
         $president = Vehicle::findOrFail($id);
         $president->is_approved = 1;
-        $president->approved_by = auth()->id();
+        $president->approved_by =  get_user_id();
+        $president->approved_by_name =  get_user_name();
         $president->save();
         return true;
     }
@@ -134,7 +135,8 @@ class VehicleController extends Controller
     {
         $president = Vehicle::findOrFail($id);
         $president->is_approved = 2;
-        $president->approved_by = auth()->id();
+        $president->approved_by =  get_user_id();
+        $president->approved_by_name =  get_user_name();
         $president->save();
         return true;
     }

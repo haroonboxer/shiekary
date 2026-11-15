@@ -80,6 +80,7 @@ class ContractController extends Controller
             $contract->approved_by = null;
         }
         $request->contract_id == 0 ? $contract->created_by = get_user_id() : $contract->updated_by = get_user_id();
+        $request->contract_id == 0 ? $contract->created_by_name = get_user_name() : $contract->updated_by_name = get_user_name();
         $request->contract_id == 0 ? $contract->save() : $contract->update();
         return true;
     }
@@ -112,7 +113,7 @@ class ContractController extends Controller
     {
         $president = Contract::findOrFail($id);
         $president->is_approved = 1;
-        $president->approved_by = auth()->id();
+        $president->approved_by = get_user_id();
         $president->save();
         return true;
     }
@@ -121,7 +122,7 @@ class ContractController extends Controller
     {
         $president = Contract::findOrFail($id);
         $president->is_approved = 2;
-        $president->approved_by = auth()->id();
+        $president->approved_by = get_user_id();
         $president->save();
         return true;
     }

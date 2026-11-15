@@ -86,8 +86,8 @@
                         id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
                         <div class="user-nav d-sm-flex d-none"><span
-                                class="user-name fw-bolder">{{ auth()->user()->name }}</span><span
-                                class="user-status">{{ auth()->user()->role_details->name }}</span></div><span
+                                class="user-name fw-bolder">{{ Auth::user()->name }}</span><span
+                                class="user-status">{{ Auth::user()->roles[0] }}</span></div><span
                             class="avatar"><img class="round" src="{{ asset('user_default.jpg') }}" alt="avatar"
                                 height="40" width="40"><span class="avatar-status-online"></span></span>
                     </a>
@@ -137,68 +137,68 @@
                         href="{{ Route::currentRouteName() != 'home' ? route('home') : 'javascript:void(0)' }}"><i
                             data-feather="home"></i><span class="menu-title text-truncate">صفحه اصلی</span></a>
                 </li>
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'organizations' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'company' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'organizations' ? route('organizations') : 'javascript:void(0)' }}"><i
-                                data-feather="monitor"></i><span class="menu-title text-truncate">شرکت
-                                ها</span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth::user()->roles,true) ||in_array('تایید',Auth::user()->roles,true))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'organizations' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'company' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'organizations' ? route('organizations') : 'javascript:void(0)' }}"><i
+                            data-feather="monitor"></i><span class="menu-title text-truncate">شرکت
+                            ها</span></a>
+                </li>
                 @endif
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'shops' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'shop' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'shops' ? route('shops') : 'javascript:void(0)' }}"><i
-                                data-feather="lock"></i><span class="menu-title text-truncate">دوکان ها</span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth()->user()->roles) ||in_array('تایید',Auth()->user()->roles))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'shops' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'shop' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'shops' ? route('shops') : 'javascript:void(0)' }}"><i
+                            data-feather="lock"></i><span class="menu-title text-truncate">دوکان ها</span></a>
+                </li>
                 @endif
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'javaz' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'javaz' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'javaz' ? route('javaz') : 'javascript:void(0)' }}"><i
-                                data-feather="book-open"></i><span class="menu-title text-truncate">جوازهای نزدیک به ختم اعتبار 
-                                </span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth()->user()->roles) ||in_array('تایید',Auth()->user()->roles))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'javaz' ? 'active' : '' }} @if (Route::currentRouteName() == 'organization-general-form') {{ Session::get('menu') == 'javaz' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'javaz' ? route('javaz') : 'javascript:void(0)' }}"><i
+                            data-feather="book-open"></i><span class="menu-title text-truncate">جوازهای نزدیک به ختم اعتبار
+                        </span></a>
+                </li>
                 @endif
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'report' ? 'active' : '' }} @if (Route::currentRouteName() == 'report') {{ Session::get('menu') == 'report' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'report' ? route('report') : 'javascript:void(0)' }}"><i
-                                data-feather="check-circle"></i><span
-                                class="menu-title text-truncate">گذارشات</span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth()->user()->roles) ||in_array('تایید',Auth()->user()->roles))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'report' ? 'active' : '' }} @if (Route::currentRouteName() == 'report') {{ Session::get('menu') == 'report' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'report' ? route('report') : 'javascript:void(0)' }}"><i
+                            data-feather="check-circle"></i><span
+                            class="menu-title text-truncate">گذارشات</span></a>
+                </li>
                 @endif
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'shekari-weapons' ? 'active' : '' }} @if (Route::currentRouteName() == 'shekari-weapons') {{ Session::get('shekari-weapons') == 'shekari-weapons' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'shekari-weapons' ? route('shekari-weapons') : 'javascript:void(0)' }}"><i
-                                data-feather="list"></i><span class="menu-title text-truncate">ثبت تفنګ های
-                                شکاری</span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth()->user()->roles) ||in_array('تایید',Auth()->user()->roles))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'shekari-weapons' ? 'active' : '' }} @if (Route::currentRouteName() == 'shekari-weapons') {{ Session::get('shekari-weapons') == 'shekari-weapons' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'shekari-weapons' ? route('shekari-weapons') : 'javascript:void(0)' }}"><i
+                            data-feather="list"></i><span class="menu-title text-truncate">ثبت تفنګ های
+                            شکاری</span></a>
+                </li>
                 @endif
-                @if (auth()->user()->role_id == 2 || auth()->user()->role_id == 4)
-                    <li
-                        class="nav-item {{ Route::currentRouteName() == 'shekari-weapon-report' ? 'active' : '' }} @if (Route::currentRouteName() == 'shekari-weapon-report') {{ Session::get('shekari-weapon-report') == 'shekari-weapon-report' ? 'active' : '' }} @endif">
-                        <a class="d-flex align-items-center"
-                            href="{{ Route::currentRouteName() != 'shekari-weapon-report' ? route('shekari-weapon-report') : 'javascript:void(0)' }}"><i
-                                data-feather="check-circle"></i><span class="menu-title text-truncate">گذارشات تفنګ
-                                های شکاری</span></a>
-                    </li>
+                @if (in_array('ثبت کمپنی ها',Auth()->user()->roles) ||in_array('تایید',Auth()->user()->roles))
+                <li
+                    class="nav-item {{ Route::currentRouteName() == 'shekari-weapon-report' ? 'active' : '' }} @if (Route::currentRouteName() == 'shekari-weapon-report') {{ Session::get('shekari-weapon-report') == 'shekari-weapon-report' ? 'active' : '' }} @endif">
+                    <a class="d-flex align-items-center"
+                        href="{{ Route::currentRouteName() != 'shekari-weapon-report' ? route('shekari-weapon-report') : 'javascript:void(0)' }}"><i
+                            data-feather="check-circle"></i><span class="menu-title text-truncate">گذارشات تفنګ
+                            های شکاری</span></a>
+                </li>
                 @endif
                 {{-- @if (auth()->user()->role_id == 3 || auth()->user()->role_id == 2)
                     <li class="nav-item {{ Route::currentRouteName() == 'show-weapon-to-print' ? 'active' : '' }}"><a class="d-flex align-items-center" href="{{ Route::currentRouteName() != 'show-weapon-to-print' ? route('show-weapon-to-print') : 'javascript:void(0)' }}"><i class="fa fa-print"></i><span class="menu-title text-truncate">چاپ کارت ها</span></a>
-                    </li>
+                </li>
                 @endif --}}
                 {{-- @if (auth()->user()->role_id == 1) --}}
                 {{-- <li class="nav-item {{ Route::currentRouteName() == 'register' ? 'active' : '' }}">
-                    <a class="d-flex align-items-center"
-                        href="{{ Route::currentRouteName() != 'register' ? route('register') : 'javascript:void(0)' }}"><i
-                            data-feather="users"></i><span class="menu-title text-truncate">کاربران</span></a>
+                <a class="d-flex align-items-center"
+                    href="{{ Route::currentRouteName() != 'register' ? route('register') : 'javascript:void(0)' }}"><i
+                        data-feather="users"></i><span class="menu-title text-truncate">کاربران</span></a>
                 </li> --}}
                 {{-- @endif --}}
             </ul>
@@ -281,10 +281,14 @@
             });
         }
 
-        var timeout = ({{ config('session.lifetime') }} * 60000) - 1000;
-        setTimeout(function() {
-            window.location.reload(1);
-        }, timeout);
+        // var timeout = ({
+        //     {
+        //         config('session.lifetime')
+        //     }
+        // }* 60000) - 1000;
+        // setTimeout(function() {
+        //     window.location.reload(1);
+        // }, timeout);
     </script>
     @yield('scripts')
 </body>

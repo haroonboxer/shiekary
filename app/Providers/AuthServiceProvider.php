@@ -21,10 +21,23 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->registerPolicies();
+        Gate::before(function ($user, $ability) {
 
-        //
+            foreach ($user->claims as $claim) {
+
+                if (
+                    strtolower(trim($claim['type'] ?? ''))
+                    === strtolower(trim($ability))
+                    &&
+                    ($claim['allowed'] ?? false) === true
+                ) {
+                    return true;
+                }
+            }
+
+            return null;
+        });
     }
 }

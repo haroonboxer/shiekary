@@ -14,6 +14,7 @@ class PresidentController extends Controller
 {
     protected function index($organization_id)
     {
+        dd("kjalsdhf");
         $data['organization_id'] = $organization_id;
         $data['organization'] = Organization::where('id', decode_organization_id($organization_id))->first();
         $data['presidents'] = President::where('organization_id', decode_organization_id($organization_id))->orderBy('id', 'desc')->get();
@@ -89,9 +90,9 @@ class PresidentController extends Controller
         $president->tin = $request->tin;
         // $president->country_id = $request->country_id;
         // if ($request->country_id == 1) {
-            $president->permanent_province_id = $request->permanent_province_id;
-            $president->permanent_district_id = $request->permanent_district_id;
-            $president->permanent_village = $request->permanent_village;
+        $president->permanent_province_id = $request->permanent_province_id;
+        $president->permanent_district_id = $request->permanent_district_id;
+        $president->permanent_village = $request->permanent_village;
         // } else {
         //     $president->city = $request->city;
         //     $president->street_no = $request->street_no;
@@ -107,6 +108,7 @@ class PresidentController extends Controller
         $president->image = $request->has('image') ? $img : $president->image;
         $president->attachments = $request->has('attachments') ? $attachment : $president->attachments;
         $request->president_id == 0 ? $president->created_by = get_user_id() : $president->updated_by = get_user_id();
+        $request->president_id == 0 ? $president->created_by_name = get_user_name() : $president->updated_by_name = get_user_name();
         $request->president_id == 0 ? $president->save() : $president->update();
         return true;
     }
@@ -138,6 +140,7 @@ class PresidentController extends Controller
         $president->status = 0;
         $president->status_attachments =  $attachment;
         $president->updated_by = get_user_id();
+        $president->updated_by_name = get_user_name();
         $president->update();
         return true;
     }
@@ -146,7 +149,8 @@ class PresidentController extends Controller
     {
         $president = President::findOrFail($id);
         $president->is_approved = 1;
-        $president->approved_by = auth()->id();
+        $president->approved_by = get_user_id();
+        $president->approved_by_name = get_user_name();
         $president->save();
         return true;
     }
@@ -155,7 +159,8 @@ class PresidentController extends Controller
     {
         $president = President::findOrFail($id);
         $president->is_approved = 2;
-        $president->approved_by = auth()->id();
+        $president->approved_by = get_user_id();
+        $president->approved_by_name = get_user_name();
         $president->save();
         return true;
     }

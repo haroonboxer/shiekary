@@ -27,10 +27,10 @@ class ShekariWeaponController extends Controller
         if ($request->ajax()) {
 
             $query = ShekariWeapon::with([
-                    'organization',
-                    'serials',
-                    'createdBy'
-                ])
+                'organization',
+                'serials',
+                'createdBy'
+            ])
                 ->whereHas('organization', function ($q) {
                     $q->where('type', 1);
                 })
@@ -67,13 +67,12 @@ class ShekariWeaponController extends Controller
                 ->addColumn('revenue', fn($row) => $row->revenue ?? 0)
 
                 ->addColumn('action', function ($row) {
-                                $serials = $row->serials->pluck('serial_number')->toArray(); // array of serials
+                    $serials = $row->serials->pluck('serial_number')->toArray(); // array of serials
                     $serials_json = htmlspecialchars(json_encode($serials), ENT_QUOTES, 'UTF-8'); // safely encode
                     $attachment = $row->attachment ? asset('storage/shekari_weapon_files/' . $row->attachment) : '';
                     $btn = '';
-                    if(!$row->completed)
-                        {
-                    $btn .=  "<a href='#'
+                    if (!$row->completed) {
+                        $btn .=  "<a href='#'
                         class='edit_btn'
                         style='cursor:pointer'
                         data-id='{$row->id}'
@@ -93,7 +92,7 @@ class ShekariWeaponController extends Controller
                     >
                         <span class='btn btn-primary btn-sm fa fa-edit'></span>
                     </a>";
-                        }
+                    }
 
                     $btn .=  "<a href='#'
                         class='show_btn'
@@ -115,27 +114,24 @@ class ShekariWeaponController extends Controller
                     >
                         <span class='btn btn-info btn-sm fa fa-eye'></span>
                     </a>";
-                    if(!$row->completed)
-                        {
-                    $btn .=  "<a href='#'
+                    if (!$row->completed) {
+                        $btn .=  "<a href='#'
                         class='delete_btn'
                         style='cursor:pointer'
                         data-id='{$row->id}'
                     >
                         <span class='btn btn-danger btn-sm fa fa-trash'></span>
                     </a>";
-                        }
-                if(!$row->completed)
-                    {
-                    $btn .=  "<a href='#'
+                    }
+                    if (!$row->completed) {
+                        $btn .=  "<a href='#'
                         class='completed_btn'
                         style='cursor:pointer'
                         data-id='{$row->id}'
                     >
                         <span class='btn btn-warning btn-sm fa fa-check'></span>
                     </a>";
-                    }
-                    ;
+                    };
                     return $btn;
                 })
 
@@ -146,7 +142,7 @@ class ShekariWeaponController extends Controller
         return view('shekari-weapon.index', compact('organizations'));
     }
 
-   protected function store(Request $request)
+    protected function store(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
@@ -188,8 +184,10 @@ class ShekariWeaponController extends Controller
             if ($request->hasFile('attachment')) {
 
                 // delete old file if exists
-                if ($shekari_weapon->attachment &&
-                    Storage::disk('shekari_weapon_files')->exists($shekari_weapon->attachment)) {
+                if (
+                    $shekari_weapon->attachment &&
+                    Storage::disk('shekari_weapon_files')->exists($shekari_weapon->attachment)
+                ) {
 
                     Storage::disk('shekari_weapon_files')->delete($shekari_weapon->attachment);
                 }
@@ -218,11 +216,13 @@ class ShekariWeaponController extends Controller
             $shekari_weapon->fess = $request->fess;
             $shekari_weapon->revenue = $request->quantity * $request->fess;
             $shekari_weapon->attachment = $request->has('attachment') ? $attach : null;
-            $shekari_weapon->created_by = auth()->id();
-            $shekari_weapon->updated_by = $request->shekari_weapon_id != 0 ? auth()->id() : null;
+            $shekari_weapon->created_by = get_user_id();
+            $shekari_weapon->created_by_name = get_user_name();
+            $shekari_weapon->updated_by = $request->shekari_weapon_id != 0 ?  get_user_id() : null;
+            $shekari_weapon->updated_by_name = $request->shekari_weapon_id != 0 ?  get_user_name() : null;
             $shekari_weapon->save();
 
-        // =============================================================
+            // =============================================================
             // handle serial numbers (ALWAYS SAFE)
             // =============================================================
 
@@ -236,12 +236,12 @@ class ShekariWeaponController extends Controller
 
                 foreach ($request->serial_numbers as $serial) {
 
-                    if(trim($serial) == '') continue; // skip empty rows
+                    if (trim($serial) == '') continue; // skip empty rows
 
                     DB::table('shekari_weapon_serial_numbers')->insert([
                         'shekari_weapon_id' => $shekari_weapon->id,
                         'serial_number'     => $serial,
-                        'created_by'        => auth()->id(),
+                        'created_by'        => get_user_id(),
                         'created_at'        => now(),
                     ]);
                 }
@@ -249,10 +249,9 @@ class ShekariWeaponController extends Controller
 
             DB::commit();
             return true;
-
         } catch (\Exception $e) {
 
-        dd($e->getMessage());
+            dd($e->getMessage());
             DB::rollBack();
             return response()->json([
                 'response' => false,
@@ -272,11 +271,11 @@ class ShekariWeaponController extends Controller
         return true;
     }
 
-      protected function report(Request $request)
+    protected function report(Request $request)
     {
         $data['organizations'] = Organization::where('type', 1)
-        ->select('id', 'name_dr')
-        ->get();
+            ->select('id', 'name_dr')
+            ->get();
 
         $organization_id = $request->input('organization_id');
 
@@ -292,8 +291,7 @@ class ShekariWeaponController extends Controller
 
 
 
-        if($organization_id)
-        {
+        if ($organization_id) {
             $data['special_card_total_quantity'] = ShekariWeapon::when($organization_id, fn($query) => $query->where('organization_id', $organization_id))
                 ->when($specialReportStartDate, fn($query) => $query->whereDate('hijri_warada_date', '>=', $specialReportStartDate))
                 ->when($specialReportEndDate, fn($query) => $query->whereDate('hijri_warada_date', '<=', $specialReportEndDate))
@@ -303,8 +301,7 @@ class ShekariWeaponController extends Controller
                 ->when($specialReportStartDate, fn($query) => $query->whereDate('hijri_warada_date', '>=', $specialReportStartDate))
                 ->when($specialReportEndDate, fn($query) => $query->whereDate('hijri_warada_date', '<=', $specialReportEndDate))
                 ->sum('revenue');
-
-         } else {
+        } else {
             // dd($startDate,$endDate);
             $data['general_card_total_quantity'] = ShekariWeapon::when($startDate, fn($query) => $query->whereDate('hijri_warada_date', '>=', $startDate))
                 ->when($endDate, fn($query) => $query->whereDate('hijri_warada_date', '<=', $endDate))
@@ -313,7 +310,7 @@ class ShekariWeaponController extends Controller
             $data['general_card_total_revenue'] = ShekariWeapon::when($startDate, fn($query) => $query->whereDate('hijri_warada_date', '>=', $startDate))
                 ->when($endDate, fn($query) => $query->whereDate('hijri_warada_date', '<=', $endDate))
                 ->sum('revenue');
-         }
+        }
 
         //  dd($data);
         return view('shekari-weapon.report', $data);

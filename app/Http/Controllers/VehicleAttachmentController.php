@@ -62,7 +62,8 @@ class VehicleAttachmentController extends Controller
     {
         $vehicle_attachment = VehicleAttachment::findOrFail($id);
         $vehicle_attachment->is_approved = 1;
-        $vehicle_attachment->approved_by = auth()->id();
+        $vehicle_attachment->approved_by = get_user_id();
+        $vehicle_attachment->approved_by_name = get_user_name();
         $vehicle_attachment->save();
         return true;
     }
@@ -71,7 +72,8 @@ class VehicleAttachmentController extends Controller
     {
         $vehicle_attachment = VehicleAttachment::findOrFail($id);
         $vehicle_attachment->is_approved = 2;
-        $vehicle_attachment->approved_by = auth()->id();
+        $vehicle_attachment->approved_by = get_user_id();
+        $vehicle_attachment->approved_by_name = get_user_name();
         $vehicle_attachment->save();
         return true;
     }

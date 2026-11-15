@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 function encode_organization_id($id)
@@ -27,5 +28,9 @@ function to_jalai($date)
 
 function get_user_id()
 {
-    return auth()->user()->id;
+    return Auth::user()->id; //auth()->user()->id;
+}
+function get_user_name()
+{
+    return Auth::user()->name;
 }
