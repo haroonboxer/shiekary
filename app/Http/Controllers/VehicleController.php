@@ -78,6 +78,7 @@ class VehicleController extends Controller
         $vehicle->expire_date = to_gregorian($request->expire_date);
         $vehicle->vehicle_attachment_id = $request->vehicle_attachment_id;
         $request->vehicle_id == 0 ? $vehicle->created_by = get_user_id() : $vehicle->updated_by = get_user_id();
+        $request->vehicle_id == 0 ? $vehicle->created_by_name = get_user_name() : $vehicle->updated_by = get_user_name();
         $request->vehicle_id == 0 ? $vehicle->save() : $vehicle->update();
         return true;
     }

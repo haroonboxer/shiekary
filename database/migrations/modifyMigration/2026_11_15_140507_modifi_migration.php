@@ -111,16 +111,16 @@ return new class extends Migration
             $table->string('created_by_name')->nullable();
             $table->string('updated_by_name')->nullable();
         });
-        Schema::table('', function (Blueprint $table) {
+        // Schema::table('', function (Blueprint $table) {
 
-            $table->string('created_by')->change();
-            $table->string('updated_by')->change()->nullable();
-            $table->string('approved_by')->change()->nullable();
+        //     $table->string('created_by')->change();
+        //     $table->string('updated_by')->change()->nullable();
+        //     $table->string('approved_by')->change()->nullable();
 
-            $table->string('created_by_name')->nullable();
-            $table->string('updated_by_name')->nullable();
-            $table->string('approved_by_name')->nullable();
-        });
+        //     $table->string('created_by_name')->nullable();
+        //     $table->string('updated_by_name')->nullable();
+        //     $table->string('approved_by_name')->nullable();
+        // });
         Schema::table('employee_statuses', function (Blueprint $table) {
 
             $table->string('created_by')->change();
@@ -151,11 +151,10 @@ return new class extends Migration
         Schema::table('vehicle_statuses', function (Blueprint $table) {
 
             $table->string('created_by')->change();
-            $table->string('updated_by')->change()->nullable();
+
 
 
             $table->string('created_by_name')->nullable();
-            $table->string('updated_by_name')->nullable();
         });
         Schema::table('weapon_statuses', function (Blueprint $table) {
 
@@ -176,15 +175,15 @@ return new class extends Migration
             $table->string('updated_by_name')->nullable();
             $table->string('approved_by_name')->nullable();
         });
-        Schema::table('', function (Blueprint $table) {
+        // Schema::table('', function (Blueprint $table) {
 
-            $table->string('created_by')->change();
-            $table->string('updated_by')->change()->nullable();
+        //     $table->string('created_by')->change();
+        //     $table->string('updated_by')->change()->nullable();
 
 
-            $table->string('created_by_name')->nullable();
-            $table->string('updated_by_name')->nullable();
-        });
+        //     $table->string('created_by_name')->nullable();
+        //     $table->string('updated_by_name')->nullable();
+        // });
         Schema::table('shekari_weapons', function (Blueprint $table) {
 
             $table->string('created_by')->change();

@@ -6,9 +6,9 @@
 
 <div class="card-header">
     <h4 class="card-title">لست معاونین</h4>
-    @if (auth()->user()->role_id == 2)
-        <button class="btn btn-primary show_modal" id="new_president_btn"><span data-feather='plus'></span>معاون
-            جدید</button>
+    @if (in_array('ثبت کمپنی ها',Auth::user()->roles,true))
+    <button class="btn btn-primary show_modal" id="new_president_btn"><span data-feather='plus'></span>معاون
+        جدید</button>
     @endif
 </div>
 <div class="card-body">
@@ -27,15 +27,15 @@
             <tbody>
                 @php $new_btn = 0; @endphp
                 @foreach ($presidents as $item)
-                    <tr>
-                        <th>{{ $loop->iteration }}</th>
-                        <td>{{ $item->name_dr }}</td>
-                        <td>{{ $item->last_name_dr }}</td>
-                        <td>{{ $item->email }}</td>
-                        <td>{!! $item->status == 1
-                            ? '<span class="badge bg-success ps-1 pe-1">فعال</span>'
-                            : '<span class="badge bg-dark ps-1 pe-1 ">تبدیل شده است</span>' !!}
-                            {{-- @switch($item->is_approved)
+                <tr>
+                    <th>{{ $loop->iteration }}</th>
+                    <td>{{ $item->name_dr }}</td>
+                    <td>{{ $item->last_name_dr }}</td>
+                    <td>{{ $item->email }}</td>
+                    <td>{!! $item->status == 1
+                        ? '<span class="badge bg-success ps-1 pe-1">فعال</span>'
+                        : '<span class="badge bg-dark ps-1 pe-1 ">تبدیل شده است</span>' !!}
+                        {{-- @switch($item->is_approved)
                                 @case(0)
                                     {!! "<span class='btn btn-outline-warning btn-sm waves-effect round fa fa-info'> در حال انتظار </span>" !!}
                                 @break
@@ -50,68 +50,68 @@
 
                                 @default
                             @endswitch --}}
-                        </td>
-                        <th class="text-center">
-                            <button type="button" class="btn btn-outline-primary btn-sm vice_president_view_btn round"
-                                data-id="{{ $item->id }}" data_name_dr="{{ $item->name_dr }}"
-                                data_grand_father_name="{{ $item->grand_father_name }}"
-                                data_last_name_dr="{{ $item->last_name_dr }}"
-                                data_current_job="{{ $item->current_job }}" data_father_name="{{ $item->father_name }}"
-                                data_tin="{{ $item->tin }}" data_family_contact_no="{{ $item->family_contact_no }}"
-                                data_contact_no="{{ $item->contact_no }}" data_nid_pass_no="{{ $item->nid_pass_no }}"
-                                data_country_id="{{ $item->country_id }}"data_permanent_province_id="{{ $item->permanent_province_id }}"
-                                data_permanent_district_id="{{ $item->permanent_district_id }}"
-                                data_permanent_village="{{ $item->permanent_village }}"
-                                data_city="{{ $item->city }}" data_street_no="{{ $item->street_no }}"
-                                data_street_no="{{ $item->street_no }}"
-                                data_main_office_address="{{ $item->main_office_address }}"
-                                data_main_office_address="{{ $item->main_office_address }}"
-                                data_current_province_id="{{ $item->current_province_id }}"
-                                data_current_district_id="{{ $item->current_district_id }}"
-                                data_current_village="{{ $item->current_village }}"
-                                data_img="{{ URL::asset('storage/vice_president_images/' . $item->image) }}"
-                                data_status_reason="{{ $item->status_reason }}"><span
-                                    class="fa fa-eye"></span></button>
-                            @if ($item->is_approved != 1 && auth()->user()->role_id == 2)
-                                <button type="button" class="btn btn-outline-dark btn-sm round vice_president_edit_btn"
-                                    data-id="{{ $item->id }}" data_name_dr="{{ $item->name_dr }}"
-                                    data_grand_father_name="{{ $item->grand_father_name }}"
-                                    data_last_name_dr="{{ $item->last_name_dr }}"
-                                    data_current_job="{{ $item->current_job }}"
-                                    data_father_name="{{ $item->father_name }}" data_tin="{{ $item->tin }}"
-                                    data_family_contact_no="{{ $item->family_contact_no }}"
-                                    data_contact_no="{{ $item->contact_no }}"
-                                    data_nid_pass_no="{{ $item->nid_pass_no }}"
-                                    data_country_id="{{ $item->country_id }}"data_permanent_province_id="{{ $item->permanent_province_id }}"
-                                    data_permanent_district_id="{{ $item->permanent_district_id }}"
-                                    data_permanent_village="{{ $item->permanent_village }}"
-                                    data_city="{{ $item->city }}" data_street_no="{{ $item->street_no }}"
-                                    data_street_no="{{ $item->street_no }}"
-                                    data_main_office_address="{{ $item->main_office_address }}"
-                                    data_main_office_address="{{ $item->main_office_address }}"
-                                    data_current_province_id="{{ $item->current_province_id }}"
-                                    data_current_district_id="{{ $item->current_district_id }}"
-                                    data_current_village="{{ $item->current_village }}"
-                                    data_img="{{ URL::asset('storage/vice_president_images/' . $item->image) }}"><span
-                                        class="fa fa-edit"></span></button>
-                            @endif
-                            @if ($item->status == 1)
-                                <button type="button"
-                                    class="btn btn-outline-danger btn-sm round vice_president_cancel_btn"
-                                    data-id="{{ $item->id }}"><span class="fa fa-trash"></span></button>
-                            @endif
-                            @if ($item->is_approved == 0)
-                                {{-- <a href='#' class='me-1 vice_president_approve_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a> --}}
-                                {{-- <a href='#' class='me-1 vice_president_reject_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a> --}}
-                            @endif
-                        </th>
-                    </tr>
-                    @if ($item->status == 1)
-                        <script>
-                            var btn = document.getElementById('new_president_btn');
-                            btn.outerHTML = "";
-                        </script>
-                    @endif
+                    </td>
+                    <th class="text-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm vice_president_view_btn round"
+                            data-id="{{ $item->id }}" data_name_dr="{{ $item->name_dr }}"
+                            data_grand_father_name="{{ $item->grand_father_name }}"
+                            data_last_name_dr="{{ $item->last_name_dr }}"
+                            data_current_job="{{ $item->current_job }}" data_father_name="{{ $item->father_name }}"
+                            data_tin="{{ $item->tin }}" data_family_contact_no="{{ $item->family_contact_no }}"
+                            data_contact_no="{{ $item->contact_no }}" data_nid_pass_no="{{ $item->nid_pass_no }}"
+                            data_country_id="{{ $item->country_id }}" data_permanent_province_id="{{ $item->permanent_province_id }}"
+                            data_permanent_district_id="{{ $item->permanent_district_id }}"
+                            data_permanent_village="{{ $item->permanent_village }}"
+                            data_city="{{ $item->city }}" data_street_no="{{ $item->street_no }}"
+                            data_street_no="{{ $item->street_no }}"
+                            data_main_office_address="{{ $item->main_office_address }}"
+                            data_main_office_address="{{ $item->main_office_address }}"
+                            data_current_province_id="{{ $item->current_province_id }}"
+                            data_current_district_id="{{ $item->current_district_id }}"
+                            data_current_village="{{ $item->current_village }}"
+                            data_img="{{ URL::asset('storage/vice_president_images/' . $item->image) }}"
+                            data_status_reason="{{ $item->status_reason }}"><span
+                                class="fa fa-eye"></span></button>
+                        @if ($item->is_approved != 1 && in_array('ثبت کمپنی ها',Auth::user()->roles,true))
+                        <button type="button" class="btn btn-outline-dark btn-sm round vice_president_edit_btn"
+                            data-id="{{ $item->id }}" data_name_dr="{{ $item->name_dr }}"
+                            data_grand_father_name="{{ $item->grand_father_name }}"
+                            data_last_name_dr="{{ $item->last_name_dr }}"
+                            data_current_job="{{ $item->current_job }}"
+                            data_father_name="{{ $item->father_name }}" data_tin="{{ $item->tin }}"
+                            data_family_contact_no="{{ $item->family_contact_no }}"
+                            data_contact_no="{{ $item->contact_no }}"
+                            data_nid_pass_no="{{ $item->nid_pass_no }}"
+                            data_country_id="{{ $item->country_id }}" data_permanent_province_id="{{ $item->permanent_province_id }}"
+                            data_permanent_district_id="{{ $item->permanent_district_id }}"
+                            data_permanent_village="{{ $item->permanent_village }}"
+                            data_city="{{ $item->city }}" data_street_no="{{ $item->street_no }}"
+                            data_street_no="{{ $item->street_no }}"
+                            data_main_office_address="{{ $item->main_office_address }}"
+                            data_main_office_address="{{ $item->main_office_address }}"
+                            data_current_province_id="{{ $item->current_province_id }}"
+                            data_current_district_id="{{ $item->current_district_id }}"
+                            data_current_village="{{ $item->current_village }}"
+                            data_img="{{ URL::asset('storage/vice_president_images/' . $item->image) }}"><span
+                                class="fa fa-edit"></span></button>
+                        @endif
+                        @if ($item->status == 1)
+                        <button type="button"
+                            class="btn btn-outline-danger btn-sm round vice_president_cancel_btn"
+                            data-id="{{ $item->id }}"><span class="fa fa-trash"></span></button>
+                        @endif
+                        @if ($item->is_approved == 0)
+                        {{-- <a href='#' class='me-1 vice_president_approve_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a> --}}
+                        {{-- <a href='#' class='me-1 vice_president_reject_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a> --}}
+                        @endif
+                    </th>
+                </tr>
+                @if ($item->status == 1)
+                <script>
+                    var btn = document.getElementById('new_president_btn');
+                    btn.outerHTML = "";
+                </script>
+                @endif
                 @endforeach
             </tbody>
             <tfoot></tfoot>
@@ -231,38 +231,38 @@
                             <option value="">کشور را انتخاب نمایید</option>
                             @foreach ($countries as $item)
                                 <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback country_id_error"></div>
-                    </div> --}}
+                    @endforeach
+                    </select>
+                    <div class="invalid-feedback country_id_error"></div>
+                </div> --}}
+            </div>
+            <h4 class="d-none permanent_resident">سکونت اصلی</h4>
+            <div class="row show_div_if_afghan">
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">ولایت</label>
+                    <select name="permanent_province_id" id="permanent_province_id" pro-type="permanent"
+                        class="form-control select2 province btn-form-block">
+                        <option value="">ولایت را انتخاب نمایید</option>
+                        @foreach ($provinces as $item)
+                        <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback permanent_province_id_error"></div>
                 </div>
-                <h4 class="d-none permanent_resident">سکونت اصلی</h4>
-                <div class="row show_div_if_afghan">
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">ولایت</label>
-                        <select name="permanent_province_id" id="permanent_province_id" pro-type="permanent"
-                            class="form-control select2 province btn-form-block">
-                            <option value="">ولایت را انتخاب نمایید</option>
-                            @foreach ($provinces as $item)
-                                <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback permanent_province_id_error"></div>
-                    </div>
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">ولسوالی</label>
-                        <select name="permanent_district_id" id="permanent_district_id" class="form-control select2">
-                            <option value="">ولسوالی را انتخاب نمایید</option>
-                        </select>
-                        <div class="invalid-feedback permanent_district_id_error"></div>
-                    </div>
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">قریه</label>
-                        <input type="text" class="form-control" name="permanent_village" />
-                        <div class="invalid-feedback permanent_village_error"></div>
-                    </div>
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">ولسوالی</label>
+                    <select name="permanent_district_id" id="permanent_district_id" class="form-control select2">
+                        <option value="">ولسوالی را انتخاب نمایید</option>
+                    </select>
+                    <div class="invalid-feedback permanent_district_id_error"></div>
                 </div>
-                {{-- <div class="row show_div_if_foreign d-none">
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">قریه</label>
+                    <input type="text" class="form-control" name="permanent_village" />
+                    <div class="invalid-feedback permanent_village_error"></div>
+                </div>
+            </div>
+            {{-- <div class="row show_div_if_foreign d-none">
                     <div class="mb-1 col-sm-12 col-md-4">
                         <label class="mb-1">شهر</label>
                         <input type="text" class="form-control" name="city" />
@@ -279,73 +279,73 @@
                         <div class="invalid-feedback main_office_address_error"></div>
                     </div>
                 </div> --}}
-                <h4>سکونت فعلی</h4>
-                <div class="row">
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">ولایت</label>
-                        <select name="current_province_id" id="current_province_id" pro-type="current"
-                            class="form-control select2 province btn-form-block">
-                            <option value="">ولایت را انتخاب نمایید</option>
-                            @foreach ($provinces as $item)
-                                <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
-                            @endforeach
-                        </select>
-                        <div class="invalid-feedback current_province_id_error"></div>
-                    </div>
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">ولسوالی</label>
-                        <select name="current_district_id" id="current_district_id" class="form-control select2">
-                            <option value="">ولسوالی را انتخاب نمایید</option>
-                        </select>
-                        <div class="invalid-feedback current_district_id_error"></div>
-                    </div>
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="mb-1">قریه</label>
-                        <input type="text" class="form-control" name="current_village" />
-                        <div class="invalid-feedback current_village_error"></div>
-                    </div>
+            <h4>سکونت فعلی</h4>
+            <div class="row">
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">ولایت</label>
+                    <select name="current_province_id" id="current_province_id" pro-type="current"
+                        class="form-control select2 province btn-form-block">
+                        <option value="">ولایت را انتخاب نمایید</option>
+                        @foreach ($provinces as $item)
+                        <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
+                        @endforeach
+                    </select>
+                    <div class="invalid-feedback current_province_id_error"></div>
+                </div>
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">ولسوالی</label>
+                    <select name="current_district_id" id="current_district_id" class="form-control select2">
+                        <option value="">ولسوالی را انتخاب نمایید</option>
+                    </select>
+                    <div class="invalid-feedback current_district_id_error"></div>
+                </div>
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="mb-1">قریه</label>
+                    <input type="text" class="form-control" name="current_village" />
+                    <div class="invalid-feedback current_village_error"></div>
+                </div>
 
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label for="" class="mb-2">عکس رییس</label>
-                        <div class="d-flex">
-                            <a href="#" class="me-25">
-                                <img src="{{ asset('user_default.jpg') }}" id="product-img"
-                                    class="upload-product rounded me-50" alt="product image" height="100"
-                                    width="100" />
-                            </a>
-                            <!-- upload and reset button -->
-                            <div class="d-flex align-items-end mt-75 ms-1">
-                                <div>
-                                    <label for="product-upload"
-                                        class="btn btn-sm btn-primary mb-75 me-75 to_hide">انتخاب</label>
-                                    <input type="file" id="product-upload" name="image" hidden
-                                        accept="image/*" />
-                                    <div class="invalid-feedback image_error"></div>
-                                    <button type="button" id="product-reset"
-                                        class="btn btn-sm btn-outline-secondary mb-75 to_hide">حذف</button>
-                                    <p class="mb-0 to_hide">عکس به فارمت های jpg,jpeg,png باشد</p>
-                                </div>
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label for="" class="mb-2">عکس رییس</label>
+                    <div class="d-flex">
+                        <a href="#" class="me-25">
+                            <img src="{{ asset('user_default.jpg') }}" id="product-img"
+                                class="upload-product rounded me-50" alt="product image" height="100"
+                                width="100" />
+                        </a>
+                        <!-- upload and reset button -->
+                        <div class="d-flex align-items-end mt-75 ms-1">
+                            <div>
+                                <label for="product-upload"
+                                    class="btn btn-sm btn-primary mb-75 me-75 to_hide">انتخاب</label>
+                                <input type="file" id="product-upload" name="image" hidden
+                                    accept="image/*" />
+                                <div class="invalid-feedback image_error"></div>
+                                <button type="button" id="product-reset"
+                                    class="btn btn-sm btn-outline-secondary mb-75 to_hide">حذف</button>
+                                <p class="mb-0 to_hide">عکس به فارمت های jpg,jpeg,png باشد</p>
                             </div>
-                            <!--/ upload and reset button -->
                         </div>
-                    </div>
-                    <div class="mb-1 col-sm-12 col-md-4">
-                        <label class="w-100 mb-3">ضمایم</label>
-                        <input type="file" class="form-control-file" name="attachments" accept="application/pdf">
-                        <div class="invalid-feedback attachments_error"></div>
-                    </div>
-                    <div class="mb-1">
-                        <p class="show_cancel_reason"></p>
+                        <!--/ upload and reset button -->
                     </div>
                 </div>
-                <button type="submit" class="btn btn-outline-primary btn-sm me-1 btn-form-block to_hide"><span
-                        class="fa fa-save"></span></button>
-                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal"><span
-                        class="fa fa-times"></span></button>
+                <div class="mb-1 col-sm-12 col-md-4">
+                    <label class="w-100 mb-3">ضمایم</label>
+                    <input type="file" class="form-control-file" name="attachments" accept="application/pdf">
+                    <div class="invalid-feedback attachments_error"></div>
+                </div>
+                <div class="mb-1">
+                    <p class="show_cancel_reason"></p>
+                </div>
             </div>
-
-        </form>
+            <button type="submit" class="btn btn-outline-primary btn-sm me-1 btn-form-block to_hide"><span
+                    class="fa fa-save"></span></button>
+            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal"><span
+                    class="fa fa-times"></span></button>
     </div>
+
+    </form>
+</div>
 </div>
 
 @include('organization.general_scripts')
@@ -388,7 +388,7 @@
         }).then((result) => {
             if (result.value == true) {
                 $.get("{{ route('vice-president-reject') }}/" + $(this).attr('data-id'), function(
-                data) {
+                    data) {
                     if (data) {
                         success_msg("رد گردید");
                         $('.load_btn[data-route="vice-presidents"]').click();
@@ -415,7 +415,7 @@
                 var value = `<option value="">--انتخاب ولسوالی--</option>`;
                 districts.forEach(item => {
                     value += `<option value="` + item.id + `">` + item.name_dr +
-                    `</option>`;
+                        `</option>`;
                 });
 
                 provinceType == 'permanent' ? $('#permanent_district_id').html(value) : $(
@@ -542,7 +542,7 @@
                         $.each(response, function(prefix, val) {
                             $('div.' + prefix + '_error').text(val[0]);
                             $("select[name=" + prefix + "]").parent().addClass(
-                            'is-invalid');
+                                'is-invalid');
                             $("select[name=" + prefix + "]").addClass('is-invalid');
                             $("input[name=" + prefix + "]").addClass('is-invalid');
                         });

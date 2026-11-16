@@ -34,7 +34,7 @@ class OrganizationController extends Controller
                     return $data->created_by_details->name;
                 })
                 ->addColumn('created_by_details', function ($data) {
-                    return $data->created_by_details->name;
+                    return $data->created_by_name;
                 })
                 ->addColumn('status_details', function ($data) {
                     $btn = "";
@@ -90,7 +90,7 @@ class OrganizationController extends Controller
                     return $data->created_by_details->name;
                 })
                 ->addColumn('created_by_details', function ($data) {
-                    return $data->created_by_details->name;
+                    return $data->created_by_name;
                 })
                 ->addColumn('status_details', function ($data) {
                     $btn = "";

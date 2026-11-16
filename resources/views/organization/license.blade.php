@@ -6,11 +6,11 @@
 
 <div class="card-header">
     <h4 class="card-title">لست جواز</h4>
-        @if (auth()->user()->role_id == 2)
-            <button class="btn btn-primary show_modal" id="new_license_btn"><span data-feather='plus'></span>ثبت جواز</button>
-        @endif
-    </div>
-    <div class="card-body">
+    @if (in_array('ثبت کمپنی ها',Auth::user()->roles,true))
+    <button class="btn btn-primary show_modal" id="new_license_btn"><span data-feather='plus'></span>ثبت جواز</button>
+    @endif
+</div>
+<div class="card-body">
     <div class="table-responsive">
         <table class="datatables-ajax table">
             <thead class="table-dark">
@@ -26,15 +26,15 @@
             <tbody>
                 @php $new_btn = 0; @endphp
                 @foreach ($licenses as $item)
-                    <tr>
-                        <th>{{ $loop->iteration }}</th>
-                        <td>{{ $item->license_type_details->name_dr }}</td>
-                        <td>{{ to_jalai($item->issue_date) }}</td>
-                        <td>{{ to_jalai($item->expire_date) }}</td>
-                        <td>
-                            {!! $item->status == 1 ? '<span class="badge bg-success ps-1 pe-1">فعال</span>' : '<span class="badge bg-dark ps-1 pe-1 ">لغو شده است</span>' !!}
-                            {!! $item->is_printed == 1 ? '<span class="badge bg-primary ps-1 pe-1">چاپ شده</span>' : '<span class="badge bg-dark ps-1 pe-1 ">چاپ نشده</span>' !!}
-                            {{-- @switch($item->is_approved)
+                <tr>
+                    <th>{{ $loop->iteration }}</th>
+                    <td>{{ $item->license_type_details->name_dr }}</td>
+                    <td>{{ to_jalai($item->issue_date) }}</td>
+                    <td>{{ to_jalai($item->expire_date) }}</td>
+                    <td>
+                        {!! $item->status == 1 ? '<span class="badge bg-success ps-1 pe-1">فعال</span>' : '<span class="badge bg-dark ps-1 pe-1 ">لغو شده است</span>' !!}
+                        {!! $item->is_printed == 1 ? '<span class="badge bg-primary ps-1 pe-1">چاپ شده</span>' : '<span class="badge bg-dark ps-1 pe-1 ">چاپ نشده</span>' !!}
+                        {{-- @switch($item->is_approved)
                                 @case(0)
                                     {!! "<span class='btn btn-outline-warning btn-sm waves-effect round fa fa-info'> در حال انتظار </span>" !!}
                                 @break
@@ -49,30 +49,30 @@
 
                                 @default
                             @endswitch --}}
-                        </td>
-                        <th class="text-center">
-                            <button type="button" class="btn btn-outline-primary btn-sm license_view_btn round" data-id="{{ $item->id }}" data_license_type_id="{{ $item->license_type_id }}" data_issue_date="{{ to_jalai($item->issue_date) }}" data_expire_date="{{ to_jalai($item->expire_date) }}" data_status_reason="{{ $item->status_reason }}" data_attachment_files="{{ URL::asset('storage/attachment_files/' . $item->attachment_files) }}" data_tariff_no="{{ $item->tariff_no }}" data_tariff_date="{{ to_jalai($item->tariff_date) }}" data_tariff_amount="{{ $item->tariff_amount }}"><span class="fa fa-eye"></span></button>
-                            @if ($item->is_approved != 1 && auth()->user()->role_id == 2)
-                                <button type="button" class="btn btn-outline-dark btn-sm round license_edit_btn" data-id="{{ $item->id }}" data_license_type_id="{{ $item->license_type_id }}" data_issue_date="{{ to_jalai($item->issue_date) }}" data_expire_date="{{ to_jalai($item->expire_date) }}" data_status_reason="{{ $item->status_reason }}" data_attachment_files="{{ URL::asset('storage/attachment_files/' . $item->attachment_files) }}" data_tariff_no="{{ $item->tariff_no }}" data_tariff_date="{{ to_jalai($item->tariff_date) }}" data_tariff_amount="{{ $item->tariff_amount }}"><span class="fa fa-edit"></span></button>
-                            @endif
-                            @if ($item->status == 1)
-                                <button type="button" class="btn btn-outline-danger btn-sm round license_cancel_btn" data-id="{{ $item->id }}"><span class="fa fa-trash"></span></button>
-                            @endif
-                            @if ($item->is_printed == 0)
-                                <a href="{{ route('license-print', encode_organization_id($item->id)) }}" class="btn btn-outline-secondary btn-sm round"> <span class="fa fa-print"> </span></a>
-                            @endif
-                            @if ($item->is_approved == 0)
-                                {{-- <a href='#' class='me-1 license_approve_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a> --}}
-                                {{-- <a href='#' class='me-1 license_reject_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a> --}}
-                            @endif
-                        </th>
-                    </tr>
-                    @if ($item->status == 1)
-                        <script>
-                            var btn = document.getElementById('new_license_btn');
-                            btn.outerHTML = "";
-                        </script>
-                    @endif
+                    </td>
+                    <th class="text-center">
+                        <button type="button" class="btn btn-outline-primary btn-sm license_view_btn round" data-id="{{ $item->id }}" data_license_type_id="{{ $item->license_type_id }}" data_issue_date="{{ to_jalai($item->issue_date) }}" data_expire_date="{{ to_jalai($item->expire_date) }}" data_status_reason="{{ $item->status_reason }}" data_attachment_files="{{ URL::asset('storage/attachment_files/' . $item->attachment_files) }}" data_tariff_no="{{ $item->tariff_no }}" data_tariff_date="{{ to_jalai($item->tariff_date) }}" data_tariff_amount="{{ $item->tariff_amount }}"><span class="fa fa-eye"></span></button>
+                        @if ($item->is_approved != 1 && in_array('ثبت کمپنی ها',Auth::user()->roles,true))
+                        <button type="button" class="btn btn-outline-dark btn-sm round license_edit_btn" data-id="{{ $item->id }}" data_license_type_id="{{ $item->license_type_id }}" data_issue_date="{{ to_jalai($item->issue_date) }}" data_expire_date="{{ to_jalai($item->expire_date) }}" data_status_reason="{{ $item->status_reason }}" data_attachment_files="{{ URL::asset('storage/attachment_files/' . $item->attachment_files) }}" data_tariff_no="{{ $item->tariff_no }}" data_tariff_date="{{ to_jalai($item->tariff_date) }}" data_tariff_amount="{{ $item->tariff_amount }}"><span class="fa fa-edit"></span></button>
+                        @endif
+                        @if ($item->status == 1)
+                        <button type="button" class="btn btn-outline-danger btn-sm round license_cancel_btn" data-id="{{ $item->id }}"><span class="fa fa-trash"></span></button>
+                        @endif
+                        @if ($item->is_printed == 0)
+                        <a href="{{ route('license-print', encode_organization_id($item->id)) }}" class="btn btn-outline-secondary btn-sm round"> <span class="fa fa-print"> </span></a>
+                        @endif
+                        @if ($item->is_approved == 0)
+                        {{-- <a href='#' class='me-1 license_approve_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-success btn-sm waves-effect round fa fa-check'></span></a> --}}
+                        {{-- <a href='#' class='me-1 license_reject_btn' style='cursor: pointer;' data-id="{{ $item->id }}"><span class='btn btn-outline-primary btn-sm waves-effect round fa fa-times'></span></a> --}}
+                        @endif
+                    </th>
+                </tr>
+                @if ($item->status == 1)
+                <script>
+                    var btn = document.getElementById('new_license_btn');
+                    btn.outerHTML = "";
+                </script>
+                @endif
                 @endforeach
             </tbody>
             <tfoot></tfoot>
@@ -123,19 +123,19 @@
                         <select name="license_type_id" id="license_type_id" class="form-control select2">
                             <option value="">نوعیت جواز را انتخاب نمایید</option>
                             @foreach ($license_types as $item)
-                                <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
+                            <option value="{{ $item->id }}">{{ $item->name_dr }}</option>
                             @endforeach
                         </select>
                         <div class="invalid-feedback license_type_id_error"></div>
                     </div>
                     <div class="mb-1 col-sm-12 col-md-6">
                         <label class="mb-1">تاریخ صدور</label>
-                        <input type="text" class="form-control farsi-date-picker" id="issue_date" name="issue_date" autocomplete="off"/>
+                        <input type="text" class="form-control farsi-date-picker" id="issue_date" name="issue_date" autocomplete="off" />
                         <div class="invalid-feedback issue_date_error"></div>
                     </div>
                     <div class="mb-1 col-sm-12 col-md-6">
                         <label class="mb-1">تاریخ اعتبار</label>
-                        <input type="text" class="form-control farsi-date-picker" id="expire_date" name="expire_date" autocomplete="off"/>
+                        <input type="text" class="form-control farsi-date-picker" id="expire_date" name="expire_date" autocomplete="off" />
                         <div class="invalid-feedback expire_date_error"></div>
                     </div>
                     <div class="mb-1 col-sm-12 col-md-6">
@@ -145,12 +145,12 @@
                     </div>
                     <div class="mb-1 col-sm-12 col-md-6">
                         <label class="mb-1">مقدار پول</label>
-                        <input type="text" class="form-control" name="tariff_amount"/>
+                        <input type="text" class="form-control" name="tariff_amount" />
                         <div class="invalid-feedback tariff_amount_error"></div>
                     </div>
                     <div class="form-group mb-1 col-sm-12 col-md-6">
                         <label class="mb-1">تاریخ آویز</label>
-                        <input type="text" class="form-control farsi-date-picker" name="tariff_date" autocomplete="off"/>
+                        <input type="text" class="form-control farsi-date-picker" name="tariff_date" autocomplete="off" />
                         <div class="invalid-feedback tariff_date_error"></div>
                     </div>
                 </div>

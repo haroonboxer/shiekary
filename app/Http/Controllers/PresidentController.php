@@ -14,7 +14,7 @@ class PresidentController extends Controller
 {
     protected function index($organization_id)
     {
-        dd("kjalsdhf");
+
         $data['organization_id'] = $organization_id;
         $data['organization'] = Organization::where('id', decode_organization_id($organization_id))->first();
         $data['presidents'] = President::where('organization_id', decode_organization_id($organization_id))->orderBy('id', 'desc')->get();
