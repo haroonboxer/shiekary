@@ -85,7 +85,20 @@ class JwtGuard implements Guard
             if (!is_array($roles)) {
                 $roles = [];
             }
+            // Read projects.
+            $projects = $data['Projects'] ?? [];
 
+            if (is_string($projects)) {
+                $projects = json_decode($projects, true) ?? [];
+            }
+
+            if (is_object($projects)) {
+                $projects = (array) $projects;
+            }
+
+            if (!is_array($projects)) {
+                $projects = [];
+            }
             // Read user ID from JWT claims or UserInfo.
             $userId =
                 $data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
@@ -115,6 +128,8 @@ class JwtGuard implements Guard
                 'image' => $userInfo['Image'] ?? '',
 
                 'roles' => $roles,
+
+                'projects' => $projects,
 
                 'departmentId' =>
                 $userInfo['DepartmentId'] ?? null,

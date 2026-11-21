@@ -27,6 +27,7 @@ return [
     'sso' => 
     [
         'jwt_secret' => env('SSO_JWT_SECRET'),
+         'url' => env('SSO_URL'),
     ],
 
     'ses' => [

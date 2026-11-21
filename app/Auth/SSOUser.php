@@ -19,6 +19,7 @@ class SSOUser implements Authenticatable, Authorizable
     public $email_verified_at;
 
     public $roles = [];
+    public $projects = [];
     // public $claims = [];
 
     public $image;
@@ -35,6 +36,7 @@ class SSOUser implements Authenticatable, Authorizable
         $this->last_name = $attributes['last_name'] ?? null;
         $this->email = $attributes['email'] ?? null;
         $this->user_role = $attributes['user_role'] ?? null;
+        $this->projects = $attributes['projects'] ?? [];
         $this->is_active = $attributes['is_active'] ?? true;
         $this->email_verified_at = $attributes['email_verified_at'] ?? null;
 
@@ -95,7 +97,7 @@ class SSOUser implements Authenticatable, Authorizable
             'is_active' => $this->is_active,
             'email_verified_at' => $this->email_verified_at,
             'roles' => $this->roles,
-       
+            'projects' => $this->projects,
             'image' => $this->image,
             'departmentId' => $this->departmentId,
             'departmentName' => $this->departmentName,

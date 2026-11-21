@@ -40,6 +40,7 @@
         href="{{ asset('app-assets/vendors/css/tables/datatable/responsive.bootstrap5.min.css') }}">
     <link rel="stylesheet" href="{{ asset('app-assets/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bahij-nassim/stylesheet.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         * {
             font-family: 'B Nazanin' !important;
@@ -78,10 +79,27 @@
                 <ul class="nav navbar-nav">
                     <li class="nav-item">
                         <h3 class="fw-bolder">@yield('header')</h3>
+
                     </li>
                 </ul>
             </div>
+
+            <div style="width: 250px;">
+
+                <select class="form-control" id="SelectProject">
+                    <option value="">Select Project</option>
+
+                    @foreach(Auth::user()->projects as $project)
+                    <option value="{{ $project['ids'] }}">
+                        {{ $project['Name'] }}
+                    </option>
+                    @endforeach
+
+                </select>
+
+            </div>
             <ul class="nav navbar-nav align-items-center ms-auto">
+
                 <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
                         id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
@@ -106,7 +124,9 @@
                         </form>
                     </div>
                 </li>
+
             </ul>
+
         </div>
     </nav>
     <!-- END: Header-->
@@ -241,6 +261,7 @@
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
@@ -248,6 +269,24 @@
     <!-- END: Page JS-->
 
     <script>
+        $(document).ready(function() {
+            $("#SelectProject").select2({
+                placeholder: "-     انتخاب پروژه     -",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $("#SelectProject").on('change', function() {
+
+                let projectId = $(this).val();
+                const ssoUrl = "{{ config('services.sso.url') }}";
+
+                if (projectId) {
+                    window.location.href = `${ssoUrl}/Project/JumpBetweenTheProject?projectid=${encodeURIComponent(projectId)}`;
+                }
+
+            });
+        });
         $(window).on('load', function() {
             if (feather) {
                 feather.replace({
